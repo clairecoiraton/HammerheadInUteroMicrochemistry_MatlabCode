@@ -7,58 +7,6 @@
 %College of Marine Science, University of South Florida, St. Petersburg, FL, USA
 %http://www.marine.usf.edu/user/djones/matlab/matlab.html 
 
-% List of embryo data from transect.xls:
-% 
-% date	         loc	num	vert	PT	slide  Embryo
-% '29-Mar-2017'	PM	  15	   1	   46	7		 4
-% '29-Mar-2017'	PM	  15	   2	   47	7		 2
-% '29-Mar-2017'	PM	  15	   3		48	7		 3
-% '29-Mar-2017'	PM	  6	   4		49	7		 1
-% '29-Mar-2017'	PM	  15	   5		50	7		 1
-% '29-Mar-2017'	PM	  6	   6		51	7		 2
-% '29-Mar-2017'	PM	  9	   7		52	7		 2
-% '29-Mar-2017'	PM	  10	   8		53	7		 1
-% '29-Mar-2017'	PM	  6	   9		54	7		 4
-% '29-Mar-2017'	PM	  6	   10		55	7		 3
-% '29-Mar-2017'	PM	  9	   11		56	7		 3
-% '29-Mar-2017'	PM	  10	   12		57	7		 2
-% '29-Mar-2017'	PM	  9	   13		58	7		 1
-% 13-May-2017'	   PM	  10	   5		59	18		 2
-% 13-May-2017'	   PM	  6	   6		60	18		 4
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                  VARIABLES:                                  %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Elements:
-% 1   'Li7'
-% 2   'Na23'
-% 3   'Mg24'
-% 4   'P31'
-% 5   'Ca43'
-% 6   'Sc45'
-% 7   'V51'
-% 8   'Cr53'
-% 9   'Mn55'
-% 10  'Fe57'
-% 11  'Co59'
-% 12  'Ni60'
-% 13  'Cu63'
-% 14  'Zn64'
-% 15  'Cu65'
-% 16  'Ge72'
-% 17  'Rb85'
-% 18  'Sr88'
-% 19  'Y89'
-% 20  'Cd114'
-% 21  'Sn118'
-% 22  'Ba137'
-% 23  'Au197'
-% 24  'Pb208'
-% 25  'Th232'
-% 26  'U238'
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                 INTERPOLATE:                                 %
@@ -115,18 +63,17 @@ Y       = Y(key,:);  % sort Y
 grp     = grp(key);  % sort grp
 
 % CAP:
-f_capOptimal(Y,'euc',grp,0,1)
-f_capOptimal(Y,'euc',grp,1,1)
+f_capOptimal(Y,'euc',grp,0,1)%centroid
+f_capOptimal(Y,'euc',grp,1,1)%spatial median
 
 
-cap = f_cap(Y,'euc',grp,[],0,10000,1,11,1); % <- provide optimal m=11
-cap = f_cap(Y,'euc',grp,[],1,10000,1,11,1); % <- provide optimal m=11
+cap = f_cap(Y,'euc',grp,[],0,1000,1,11,1); % spatial median <- provide optimal m=11
+cap = f_cap(Y,'euc',grp,[],1,1000,1,11,1); % centroid <- provide optimal m=11
 
 
 % Create Plot:
 
 close all;
-%f_capPlot(cap,{'15' '6' '9' '10'},[],[],[],0.03,'none',0,0,0,0);
 f_capPlot(cap,{'15' '6' '9' '10'},[],[],[],0.03,'none',0,0,1,0);
 figure(1); axis(axis*1.1)
 title('Embryo Transects')
@@ -135,7 +82,7 @@ title('Embryo Transects')
 figure(1); f_pdf('Embryo_Transects_CAP')
 
 % Test the significance of the observed classification success rate:
-f_chanceClass(grp,1-cap.loo_err.tot,10000,1);
+f_chanceClass(grp,1-cap.loo_err.tot,1000,1);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                RANDOM FOREST:   (works with Matlab R2016b - not 2017                            %
@@ -157,8 +104,6 @@ rf_GEO = f_RFclass(Y,grp,[],[],0,1,'stnd',1);
 
 % Test the significance of the observed classification success rate:
 f_chanceClass(grp,0.7636,1000,1);
-f_chanceClass(grp,0.7538,1000,1);
-
 
 %  Create a Random Forest Canonical Discriminant Analysis plot:
 f_RFvis(rf_GEO,0.95,1000,0.05);
