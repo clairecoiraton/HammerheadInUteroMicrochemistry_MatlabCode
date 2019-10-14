@@ -6,7 +6,7 @@
 % performed using the free download Fathom Toolbox for MatlabTM (Jones DL, 2017)
 % Fathom Toolbox for Matlab: software for multivariate ecological and oceanographic data analysis.
 % College of Marine Science, University of South Florida, St. Petersburg, FL, USA
-% http://www.marine.usf.edu/user/djones/matlab/matlab.html 
+% https://www.marine.usf.edu/research/matlab-resources/fathom-toolbox-for-matlab/
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
